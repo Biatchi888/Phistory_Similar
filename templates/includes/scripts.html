@@ -1,0 +1,145 @@
+{%load static%}
+{% block content %}
+
+<script>
+    // Retrieve the price history data from the Django context as a JSON string
+    const formattedPriceHistoryData = JSON.parse('{{ formatted_price_history_json|escapejs }}');
+    
+    // Check if price history data is available
+    if (formattedPriceHistoryData.length > 0) {
+        // Log a message to the browser console
+        console.log('Formatted price history data is available:', formattedPriceHistoryData);
+    
+        // Extract the price and date data from the formatted price history
+        const prices = formattedPriceHistoryData.map(entry => parseFloat(entry.price.replace('₱', ''))); // Convert to a number
+        const dates = formattedPriceHistoryData.map(entry => entry.date_scraped);
+    
+        // Get the canvas element and create the chart
+        const ctx = document.getElementById('priceHistoryChart').getContext('2d');
+        const priceHistoryChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Price History',
+                    data: prices,
+                    borderColor: 'rgba(152, 0, 239, 0.8)', // Line color
+                    borderWidth: 2, // Line width
+                    fill: false, // Do not fill area under the line
+                }],
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month and Year',
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 10, // Limit the number of visible ticks
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Price',
+                        },
+                    },
+                },
+            },
+        });
+    } else {
+        // Log a message to the browser console indicating that no formatted price history data is available
+        console.log('No formatted price history data available.');
+    }
+</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script>
+    function clearFilters() {
+        // Redirect to the current URL without any filters
+        window.location.href = window.location.pathname;
+    }
+</script>
+<script>
+    // Function to change the dropdown button image
+    function changeDropdownImage(imageSrc) {
+        var dropdownButton = document.querySelector('.dropdown-button');
+        dropdownButton.src = imageSrc;
+        
+        // Store the selected image source in localStorage
+        localStorage.setItem('selectedSupermarketImage', imageSrc);
+    }
+
+    // Function to retrieve the selected image source from localStorage
+    function getSelectedSupermarketImage() {
+        return localStorage.getItem('selectedSupermarketImage');
+    }
+
+    // Attach a click event listener to the image
+    document.querySelector('.dropdown-button').addEventListener('click', function () {
+        // Find the associated dropdown menu
+        var dropdownMenu = document.querySelector('.dropdown-menu');
+        
+        // Toggle the dropdown menu's visibility by toggling the "show" class
+        if (dropdownMenu.classList.contains('show')) {
+            dropdownMenu.classList.remove('show');
+        } else {
+            dropdownMenu.classList.add('show');
+        }
+    });
+
+    function selectSupermarket(supermarket) {
+        // Change the dropdown button image based on the selected supermarket
+        if (supermarket === 'Puregold') {
+            changeDropdownImage("{% static 'icons/puregold_horizontal.png' %}");
+        } else if (supermarket === 'ShopMetro') {
+            changeDropdownImage("{% static 'icons/shopmetro_horizontal.png' %}");
+        } else if (supermarket === 'WalterMart') {
+            changeDropdownImage("{% static 'icons/waltermart_horizontal.png' %}");
+        }
+
+        const currentURL = new URL(window.location.href);
+    
+        // Update the URL with the selected supermarket
+        if (supermarket) {
+            currentURL.searchParams.set('supermarket', supermarket);
+        } else {
+            currentURL.searchParams.delete('supermarket');
+        }
+    
+        window.location.href = currentURL.toString();
+    }
+
+    // Check if a selected supermarket image is stored in localStorage and set it
+    var storedImage = getSelectedSupermarketImage();
+    if (storedImage) {
+        changeDropdownImage(storedImage);
+    }
+</script>
+<script src="{% static 'js/vendor/modernizr-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery-migrate-3.3.0.min.js' %}"></script>
+<script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/plugins/slick.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.syotimer.min.js' %}"></script>
+<script src="{% static 'js/plugins/wow.js' %}"></script>
+<script src="{% static 'js/plugins/jquery-ui.js' %}"></script>
+<script src="{% static 'js/plugins/perfect-scrollbar.js' %}"></script>
+<script src="{% static 'js/plugins/magnific-popup.js' %}"></script>
+<script src="{% static 'js/plugins/select2.min.js' %}"></script>
+<script src="{% static 'js/plugins/waypoints.js' %}"></script>
+<script src="{% static 'js/plugins/counterup.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.countdown.min.js' %}"></script>
+<script src="{% static 'js/plugins/images-loaded.js' %}"></script>
+<script src="{% static 'js/plugins/isotope.js' %}"></script>
+<script src="{% static 'js/plugins/scrollup.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.vticker-min.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.theia.sticky.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.elevatezoom.js' %}"></script>
+
+<!-- Template JS -->
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/shop.js' %}"></script>
+{% endblock %}
