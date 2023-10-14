@@ -4,5 +4,5 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('home.urls', namespace='home')),
-    # You can add more URL patterns as needed for other apps or features
+    path('charts/', include('charts.urls')),  # Include the "charts" app's URLs
 ]

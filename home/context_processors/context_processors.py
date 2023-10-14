@@ -1,6 +1,7 @@
 from collections import defaultdict
 from pymongo import MongoClient  # Import the MongoClient
 import re
+from django import template
 
 client = MongoClient('mongodb+srv://capstonesummer1:9Q8SkkzyUPhEKt8i@cluster0.5gsgvlz.mongodb.net/')
 db = client['Product_Comparison_System']
@@ -18,3 +19,9 @@ def category_counts(request):
         category_counts[category] += 1
 
     return {'category_counts': dict(category_counts)}
+
+register = template.Library()
+
+@register.filter(name='dict_key')
+def dict_key(d, k):
+    return d.get(k, "")

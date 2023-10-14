@@ -11878,3 +11878,72 @@ footer .hotline img {
     .option:hover {
         background-color: #ccc;
     }
+
+
+
+    /* assadddddddddd */
+
+    .info-box {
+      width: 500px;
+      height: 500px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #fff;
+  }
+
+  .place-name {
+      font-size: 24px;
+      color: #8DC63F;
+      margin-bottom: 10px;
+  }
+
+  .place-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 10px;
+  }
+
+  .info-field {
+      font-weight: bold;
+  }
+
+  .weekday-text {
+      font-weight: bold;
+  }
+
+
+
+  /* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  position: relative;
+  margin: auto;
+  padding: 20px;
+  max-width: 600px;
+  background-color: #fefefe;
+  border: 1px solid #888;
+  border-radius: 5px;
+}
+
+.close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}

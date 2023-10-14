@@ -621,19 +621,20 @@
     });
 
     /*-----Modal----*/
-
     $('.modal').on('shown.bs.modal', function (e) {
         $('.product-image-slider').slick('setPosition');
         $('.slider-nav-thumbnails').slick('setPosition');
-
-        $('.product-image-slider .slick-active img').elevateZoom({
+    
+        // Initialize ElevateZoom for the product image
+        $('#product-image').elevateZoom({
             zoomType: "inner",
             cursor: "crosshair",
-            zoomWindowFadeIn: 500,
+            zoomWindowFadeIn: 100,
             zoomWindowFadeOut: 750
         });
-    })
-
+    });
+    
+    
     /*--- VSticker ----*/
     $('#news-flash').vTicker({
         speed: 500,
@@ -645,3 +646,7 @@
         
 })(jQuery);
 
+
+
+
+// HEADERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR

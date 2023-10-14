@@ -42,6 +42,9 @@ INSTALLED_APPS = [
 
     # my apps
     "home",
+    "charts",
+    "chartjs",
+
 ]
 
 MIDDLEWARE = [

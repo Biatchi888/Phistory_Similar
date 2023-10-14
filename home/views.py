@@ -1,28 +1,33 @@
 from typing import Any
 from django.shortcuts import render
-import random
 from pymongo import MongoClient
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-import re
-import json
-import logging
-from django.http import HttpResponse
-from datetime import datetime  
-
-import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from fuzzywuzzy import fuzz  
+from django.http import HttpResponse
+from datetime import datetime  
+
+import re
+import json
+import logging
+import nltk
+import random
+
+
+
+# Initialize NLTK stopwords
+nltk.download("stopwords")
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words("english"))
 
 logger = logging.getLogger(__name__)
-
 
 
 # Connect to MongoDB
 client = MongoClient('mongodb+srv://capstonesummer1:9Q8SkkzyUPhEKt8i@cluster0.5gsgvlz.mongodb.net/')
 db = client['Product_Comparison_System']
-collection = db['Graph']
-
+collection = db['Sept_FInal_Final']
 
 
 def home(request):
@@ -176,19 +181,30 @@ def sort_products(products, sort_option):
     return sorted_products
 
 
-
-
-# Initialize NLTK stopwords
-nltk.download("stopwords")
-from nltk.corpus import stopwords
-stop_words = set(stopwords.words("english"))
-
 # Preprocess text: remove stopwords, punctuation, and extra spaces
 def preprocess_text(text):
     text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
     text = " ".join([word for word in text.split() if word not in stop_words])  # Remove stopwords
     return text
+
+def extract_weight(title):
+    # Define regular expression patterns to match various weight/quantity units
+    weight_patterns = [
+        r'\b\d+\s*(?:g|grams|kg|kilograms|oz|ounces|lb|pounds)\b',
+        r'\b\d+\s*(?:ml|milliliters)\b',
+    ]
+
+    for pattern in weight_patterns:
+        # Search for the pattern in the title
+        weight_match = re.search(pattern, title, re.IGNORECASE)
+
+        if weight_match:
+            return weight_match.group()
+
+    # If no matching pattern is found, return None
+    return None
+
 
 # Calculate similarity using TF-IDF and Cosine Similarity
 def calculate_similarity(input_title, product_titles):
@@ -214,11 +230,14 @@ def find_similar_products(title):
     product_names = [preprocess_text(parts[0]) for parts in title_parts_list]
     product_weights = [preprocess_text(parts[-1]) for parts in title_parts_list]
 
+    # Fetch the category names
+    product_categories = [p.get('category', '') for p in collection.find()]
+
     similarity_scores = calculate_similarity(input_name, product_names)
 
     similar_products = []
     for i, score in enumerate(similarity_scores):
-        if 0.65 <= score <= 0.9:  # Adjust the threshold range as needed
+        if 0.50 <= score <= 0.9:  # Adjust the threshold range as needed
             # Check if the weight/grams are similar
             if fuzz.ratio(input_weight, product_weights[i]) >= 80:  # Adjust the similarity threshold as needed
                 product_doc = collection.find()[i]  # Get the MongoDB document
@@ -228,6 +247,7 @@ def find_similar_products(title):
                     'original_price': product_doc.get('original_price', ''),  # Fetch the 'original_price' field
                     'url': product_doc.get('url', ''),  # Fetch the 'url' field
                     'similarity_score': score,
+                    'category': product_categories[i],  # Add the category name
                 })
 
     similar_products.sort(key=lambda x: x['similarity_score'], reverse=True)
@@ -280,3 +300,52 @@ def product_detail(request, product_id):
         'has_price_history': bool(formatted_price_history),  # Check if price history exists
     }
     return render(request, 'product_detail.html', context)
+
+
+
+def discounts(request):
+    # Fetch all products with a discounted price from MongoDB
+    discounted_products = list(collection.find({'discounted_price': {'$exists': True}}))
+
+    # Get the selected supermarket from the URL query parameters
+    selected_supermarket = request.GET.get('supermarket')
+
+    # Filter products based on the selected supermarket (if provided)
+    if selected_supermarket and selected_supermarket != 'None':
+        discounted_products = [product for product in discounted_products if product['supermarket'] == selected_supermarket]
+
+
+    # Create a Paginator object with 15 products per page
+    paginator = Paginator(discounted_products, 15)
+
+    # Get the requested page number from the URL query parameters
+    page = request.GET.get('page')
+
+    try:
+        # Try to get the products for the requested page
+        product_page = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, default to page 1
+        product_page = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range, deliver the last page of results
+        product_page = paginator.page(paginator.num_pages)
+
+    context = {
+        'discounted_products': product_page,
+        'selected_supermarket': selected_supermarket,
+    }
+
+    return render(request, 'discounts.html', context)
+
+
+def chart(request):
+    # You can add any context data if needed
+    context = {
+        'example_data': 'Hello from the new template!',
+    }
+
+    return render(request, 'chart.html', context)
+
+
+
