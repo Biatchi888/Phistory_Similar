@@ -156,9 +156,9 @@ li.hr span {
   color: #fff;
 }
 
-::-webkit-input-placeholder {
+/* ::-webkit-input-placeholder {
   color: #838383;
-}
+} */
 
 :-ms-input-placeholder {
   color: #838383;
@@ -11933,7 +11933,7 @@ footer .hotline img {
   position: relative;
   margin: auto;
   padding: 20px;
-  max-width: 600px;
+  max-width: 1000px;
   background-color: #fefefe;
   border: 1px solid #888;
   border-radius: 5px;
@@ -11946,4 +11946,18 @@ footer .hotline img {
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
+}
+
+
+
+
+#search-results-container::-webkit-scrollbar {
+    width: 10px;
+}
+#search-results-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+#search-results-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

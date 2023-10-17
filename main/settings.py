@@ -13,22 +13,24 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 import os
-from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = "django-insecure-(4mldwfrd@+4hs(hw2h#g!l*fj()if&7qsu3v__dz0rwaakx=q"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 'whitenoise.runserver_nostatic',    
+
 
     # my apps
     "home",
@@ -53,6 +57,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
+
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -86,19 +92,16 @@ WSGI_APPLICATION = "main.wsgi.application"
 
 
 # Load environment variables from the .env file
-from dotenv import load_dotenv
 
-load_dotenv()
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'ENFORCE_SCHEMA': False,  # Set to True if you want to enforce schema
-        'CLIENT': {
-            'host': os.getenv('MONGODB_URI'),  # Use the environment variable
-        }
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -134,6 +137,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 
 # Default primary key field type

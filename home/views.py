@@ -7,12 +7,15 @@ from sklearn.metrics.pairwise import linear_kernel
 from fuzzywuzzy import fuzz  
 from django.http import HttpResponse
 from datetime import datetime  
+from django.db.models import Q
+from django.http import JsonResponse
 
 import re
 import json
 import logging
 import nltk
 import random
+from bson.json_util import dumps
 
 
 
@@ -28,6 +31,31 @@ logger = logging.getLogger(__name__)
 client = MongoClient('mongodb+srv://capstonesummer1:9Q8SkkzyUPhEKt8i@cluster0.5gsgvlz.mongodb.net/')
 db = client['Product_Comparison_System']
 collection = db['Sept_FInal_Final']
+
+
+
+def search(request):
+    search_query = request.GET.get('search_query', '')
+    # Assuming product ID is stored under 'id' field in MongoDB
+    search_results_list = list(collection.find({"title": {"$regex": search_query, "$options": "i"}}))
+    # Create a list of products that includes id for each product
+    products = [{'id': item['id'], 'title': item['title']} for item in search_results_list] if search_results_list else []
+    return JsonResponse({'search_results': products})
+# def search(request):
+#     search_query = request.GET.get('search_query', '')
+
+#     # Assuming product ID is stored under 'id' field in MongoDB
+#     search_results_list = list(collection.find({"title": {"$regex": search_query, "$options": "i"}}))
+
+#     # Create a list of products that includes id for each product
+#     products = [{'id': item['id'], 'title': item['title']} for item in search_results_list] if search_results_list else []
+
+#     context = {
+#       'search_results': products,  
+#     }
+
+#     return render(request, 'includes/search.html', context)
+
 
 
 def home(request):

@@ -1,3 +1,4 @@
+
 {% load static %}
 
 {% block content %}
@@ -53,7 +54,7 @@
                       <div class="header-info header-info-right">
                           <ul>
                               <li>Any Questions? Email Us at <strong class="text-brand"> email@gmail.com</strong></li>
-                              <li>
+                              <!-- <li>
                                   <a class="language-dropdown-active" href="#">English <i class="fi-rs-angle-small-down"></i></a>
                                   <ul class="language-dropdown">
                                       <li><a href="#"><img src="{% static 'imgs/theme/flags/flag-fr.png' %}" alt="">Français</a></li>
@@ -67,8 +68,8 @@
                                       <li><a href="#"><img src="{% static 'imgs/theme/flags/flag-fr.png' %}" alt="">INR</a></li>
                                       <li><a href="#"><img src="{% static 'imgs/theme/flags/flag-dt.png' %}" alt="">MBP</a></li>
                                       <li><a href="#"><img src="{% static 'imgs/theme/flags/flag-ru.png' %}" alt="">EU</a></li>
-                                  </ul>
-                              </li>
+                                  </ul> -->
+                              <!-- </li> -->
                           </ul>
                       </div>
                   </div>
@@ -82,29 +83,37 @@
                       <a href="{% url 'home:home' %}"><img src="{% static 'imgs/theme/logovv.png' %}" alt="logo" style="width: 75px; height: 90px; margin-right: 30px;"></a>
                   </div>
                   <div class="header-right">
-                      <div class="search-style-2">
-                          <form action="#">
-                              <select class="select-active">
-                                  <option>All Categories</option>
-                                  <option>Canned Goods</option>
-                                  <option>Milk</option>
-                                  <option>Coffee</option>
-                                  <option>Bread</option>
-                                  <option>Candles</option>
-                                  <option>Water/Mineral</option>
-                                  <option>Vinegar</option>
-                                  <option>Soy Sauce</option>
-                                  <option>Fish Sauce </option>
-                                  <option>Noodles</option>
-                                  <option>Laundry Aids</option>
-                              </select>
-                              <input type="text" placeholder="Search for items...">
-                          </form>
-                      </div>
+             <!-- SEARCH BARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR -->
+             <div class="search-style-2">
+                <div class="container">
+                    <form action="{% url 'home:search_results' %}" method="GET" class="form-inline">
+                        <input type="search" id="search-bar" name="search_query" placeholder="Search for items..." aria-label="Search">
+                    </form>
+                    <div id="search-results-container" style="position: absolute; max-height: 300px; overflow-y: auto; padding: 10px; margin-top: 10px; z-index: 999;background-color: white;">
+                        <div id="search-results">
+                            {% if search_results %}
+                            <ul class="list-group">
+                                {% for product in search_results %}
+                                <li class="list-group-item">
+                                    <div class="product-info">
+                                        <a href="{% url 'home:product_detail' product.id %}">
+                                            <img src="{{ product.image_url }}" alt="{{ product.title }}" class="product-image">
+                                            <span>{{ product.title }}</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
                       <div class="header-action-right">
                           <div class="header-action-2">
                             <div class="search-location">
-                            
+                        
 
                               <form action="#">
                                 <button id="show-location-button" class="button">Show Your Location</button>
@@ -113,7 +122,8 @@
                           
                           <div class="modal fade custom-modal" id="location-modal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
-                              <div class="modal-content" style="padding: 11px">
+                              <div class="modal-content" style="padding: 11px;   max-width: 1000px;
+                              ">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeLocationModal()"></button>
                                 <div class="modal-body">
                                         <div class="title">
@@ -131,17 +141,12 @@
                                             </div>
                                           </div>
                                           
-                                  <div id="map" style="height: 560px; width: 100%;"></div>
+                                  <div id="map" style="height: 530px; width: 820px;"></div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-
-
-
-
-                              
-                              
+                          </div> 
+                        
 <div class="header-action-icon-2">
   <a href="#">
       <img class="svgInject" alt="Nest" src="{% static 'imgs/theme/icons/icon-user.svg' %}">
@@ -249,7 +254,6 @@
                     </div>
 
 
-
 <div class="more_categories"> <span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
 </div>
 </div>
@@ -258,17 +262,17 @@
       <ul>
           <li class="hot-deals"><img src="{% static 'imgs/theme/icons/icon-hot.svg' %}" alt="hot deals"><a href="{% url 'home:discounts' %}">Hot Deals</a></li>
           <li><a class="active" href="{% url 'home:home' %}">Home <i class="fi-rs-angle-down"></i></a>
-              <ul class="sub-menu">
+              <!-- <ul class="sub-menu">
                   <li><a href="#">Home 1</a></li>
                   <li><a href="#">Home 2</a></li>
                   <li><a href="#">Home 3</a></li>
                   <li><a href="#">Home 4</a></li>
-              </ul>
+              </ul> -->
           </li>
           <li>
               <a href="#">About</a>
           </li>
-          <li><a href="shop-grid-right.html">Shop <i class="fi-rs-angle-down"></i></a>
+          <!-- <li><a href="shop-grid-right.html">Shop <i class="fi-rs-angle-down"></i></a>
               <ul class="sub-menu">
                   <li><a href="#">Shop Grid – Right Sidebar</a></li>
                   <li><a href="#">Shop Grid – Left Sidebar</a></li>
@@ -288,8 +292,8 @@
                   <li><a href="#">Shop – Checkout</a></li>
                   <li><a href="#">Shop – Compare</a></li>
               </ul>
-          </li>
-          <li class="position-static"><a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
+          </li> -->
+          <!-- <li class="position-static"><a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
               <ul class="mega-menu">
                   <li class="sub-mega-menu sub-mega-menu-width-22">
                       <a class="menu-title" href="#">Fruit & Vegetables</a>
@@ -345,7 +349,7 @@
                     </div>
                 </li>
             </ul>
-        </li>
+        </li> -->
         <li><a href="blog-category-grid.html">Blog <i class="fi-rs-angle-down"></i></a>
 
               <ul class="sub-menu">
@@ -387,7 +391,7 @@
 
 <div class="hotline d-none d-lg-flex">
   <img src="{% static 'imgs/theme/icons/icon-headphone.svg' %}" alt="hotline">
-  <p>1900 - 888<span>24/7 Support Center</span></p>
+  <p>...@gmail.com<span>24/7 Support Center</span></p>
 </div>
 <div class="header-action-icon-2 d-block d-lg-none">
   <div class="burger-icon burger-icon-white">
@@ -399,10 +403,35 @@
 <div class="header-action-right d-block d-lg-none">
   <div class="header-action-2">
       <div class="header-action-icon-2">
-          <a href="#">
-              <img alt="Nest" src="{% static 'imgs/theme/icons/icon-heart.svg' %}">
-              <span class="pro-count white">4</span>
-          </a>
+        <div class="mini-cart-icon">
+             <img alt="Nest"  id="show-location-button2" src="{% static 'imgs/theme/icons/icon-location.svg' %}">
+    </div>
+        <div class="modal fade custom-modal" id="location-modal2" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content" style="padding: 11px">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeLocationModal2()"></button>
+              <div class="modal-body">
+                      <div class="title">
+                          <h3>Supermarkets Near You</h3>
+                      </div>
+                      <div class="row" style=" text-align: center;">
+                          <div class="col-4">
+                            <h4>Puregold <img src="{% static 'icons/P.png' %}"></h4>
+                          </div>
+                          <div class="col-4">
+                            <h4>Waltermart <img src="{% static 'icons/W.png' %}"></h4>
+                          </div>
+                          <div class="col-3" >
+                            <h4>Metro Market! Market! <img src="{% static 'icons/M.png' %}"></h4>
+                          </div>
+                        </div>
+                        
+                <div id="map" style="height: 530px; width: 820px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="header-action-icon-2">
           <a class="mini-cart-icon" href="#">
@@ -611,22 +640,28 @@
 </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2jnPx44CEvp5JTozVnNthaAQ0mOXzhzc&libraries=places&callback=initMap" async defer></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2jnPx44CEvp5JTozVnNthaAQ0mOXzhzc&libraries=places&callback=initMap" async defer></script> -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2jnPx44CEvp5JTozVnNthaAQ0mOXzhzc&libraries=geometry,places&callback=initMap" async defer></script>
+
 <script>
   var map;
   var infowindow;
 
   function getPlaceDetails(place) {
-var contentString = '<div style="width:500px;height:500px; display: flex; flex-direction: column;">' +
-'<strong style="font-size: 24px; color: #8DC63F;">' + place.name + '</strong><br>';
-
-if (place.photos) {
-var firstPhotoUrl = place.photos[0].getUrl();
-contentString += '<img src="' + firstPhotoUrl + '" alt="Place photo" style="max-width:100%;height:auto; border-radius: 10px;"><br>';
-} else {
-contentString += 'No photos available<br>';
-}
-
+    const userLatLng = new google.maps.LatLng(map.getCenter().lat(), map.getCenter().lng());
+    const placeLatLng = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(userLatLng, placeLatLng);
+  
+    var contentString = '<div style="width:500px;height:500px; display: flex; flex-direction: column;">' +
+        '<strong style="font-size: 24px; color: #8DC63F;">' + place.name + '</strong><br>' +
+        '<strong>Distance : ' + Math.round(distance) + ' Metres </strong><br>'; // Added a line to display distance from current location
+    if (place.photos) {
+    var firstPhotoUrl = place.photos[0].getUrl();
+    contentString += '<img src="' + firstPhotoUrl + '" alt="Place photo" style="max-width:100%;height:auto; border-radius: 10px;"><br>';
+    } else {
+    contentString += 'No photos available<br>';
+    }
+  
 contentString +=
 '<strong style="font-weight: bold;">Address:</strong> ' + place.formatted_address + '<br>' +
 '<strong style="font-weight: bold;">Business Status:</strong> ' + place.business_status + '<br>' +
@@ -774,24 +809,29 @@ infowindow.open(map, marker);
 });
   }
 
-
 </script>
 <script>
    // Function to open the location modal
 function openLocationModal() {
   var modal = new bootstrap.Modal(document.getElementById("location-modal"));
   modal.show();
-
+  var backdrops = document.getElementsByClassName('modal-backdrop');
+    for (var i = 0; i < backdrops.length; i++) {
+        backdrops[i].remove();
+    }
   // Initialize the map (You can put your map initialization code here)
   initMap();
 }
 
 // Function to close the location modal
 function closeLocationModal() {
-  var modal = new bootstrap.Modal(document.getElementById("location-modal"));
-  modal.hide();
-  
-  // Optionally, you can also clear or hide the map here
+    var modal = new bootstrap.Modal(document.getElementById("location-modal"));
+    modal.hide();
+    // Remove any existing modal-backdrop elements
+    var backdrops = document.getElementsByClassName('modal-backdrop');
+    for (var i = 0; i < backdrops.length; i++) {
+        backdrops[i].remove();
+    }
 }
 
 // Listen for button click to open the location modal
@@ -799,7 +839,79 @@ var showLocationButton = document.getElementById("show-location-button");
 showLocationButton.addEventListener("click", openLocationModal);
 
 </script>
+
+<script>
+    // Function to open the location modal
+ function openLocationModal2() {
+   var modal = new bootstrap.Modal(document.getElementById("location-modal2"));
+   modal.show();
+   var backdrops = document.getElementsByClassName('modal-backdrop');
+     for (var i = 0; i < backdrops.length; i++) {
+         backdrops[i].remove();
+     }
+   // Initialize the map (You can put your map initialization code here)
+   initMap();
+ }
+ 
+ // Function to close the location modal
+ function closeLocationModal2() {
+     var modal = new bootstrap.Modal(document.getElementById("location-modal2"));
+     modal.hide();
+     // Remove any existing modal-backdrop elements
+     var backdrops = document.getElementsByClassName('modal-backdrop');
+     for (var i = 0; i < backdrops.length; i++) {
+         backdrops[i].remove();
+     }
+ }
+ 
+ // Listen for button click to open the location modal
+ var showLocationButton = document.getElementById("show-location-button2");
+ showLocationButton.addEventListener("click", openLocationModal2);
+ 
+ </script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Handle search form submission
+    $('.form-inline').on('submit', function(event) {
+        event.preventDefault();
+
+        var searchQuery = $('#search-bar').val().trim();
+
+        if (searchQuery) {
+            // Send an AJAX request to the search view
+            $.get('{% url "home:search_results" %}', { search_query: searchQuery }, function(data) {
+                var searchResults = data.search_results;
+
+                // Display search results in the results container
+                var resultsContainer = $('#search-results');
+                resultsContainer.empty();
+
+                if (searchResults.length > 0) {
+                    searchResults.forEach(function(product) {
+                        var productLink = $('<a>')
+                            .attr('href', '/product_detail/' + product.id)
+                            .text(product.title);
+                        var listItem = $('<li>').append(productLink);
+                        resultsContainer.append(listItem);
+                    });
+                } else {
+                    resultsContainer.append('<li>No matching products found.</li>');
+                }
+            });
+        } else {
+            // Clear search results when the search input is empty
+            $('#search-results').empty();
+        }
+    });
+});
+</script>
+
 </body>
 </html>
 
 {% endblock %}
+
+
